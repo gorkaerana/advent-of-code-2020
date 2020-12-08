@@ -27,10 +27,8 @@
   (doseq [i (range 1 nrow d-steps)]
     ;; Take r-steps to the right
     (doseq [j (range 0 r-steps)]
-      ;; Increment 'col'
-      (swap! col inc)
-      ;; Take (mod col ncol) to save a single copy of the map in memory
-      (when  (= (str ((forest-map i) (swap! col #(mod %1 ncol)))) "#")
+      ;; Increment col and take (mod col ncol) to save a single copy of the map in memory
+      (when  (= (str ((forest-map i) (swap! col #(mod (inc %1) ncol)))) "#")
         (swap! tree-counter inc)
         )
       )
