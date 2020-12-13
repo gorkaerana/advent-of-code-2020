@@ -22,14 +22,16 @@
       nrow (count forest-map)
       ncol (count (forest-map 1))
       col (atom 0)
-      tree-counter (atom 0)]
+      tree-counter (atom -1)]
   ;; Traverse rows of forest-map by d-steps
   (doseq [i (range 1 nrow d-steps)]
     ;; Take r-steps to the right
     (doseq [j (range 0 r-steps)]
-      ;; Increment col and take (mod col ncol) to save a single copy of the map in memory
-      (when  (= (str ((forest-map i) (swap! col #(mod (inc %1) ncol)))) "#")
-        (swap! tree-counter inc)
+      (doseq [k (range -1 1)]
+        ;; Increment col and take (mod col ncol) to save a single copy of the map in memory
+        (when  (= (str ((forest-map i) (swap! col #(mod (inc %1) ncol)))) "#")
+          (swap! tree-counter inc)
+          )
         )
       )
     )
