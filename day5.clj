@@ -13,32 +13,32 @@
   (reduce * (repeat n x))
   )
 
-(defn semantic-partitioning [s
-                             exponent
-                             left-char
-                             right-char]
+(defn midpoint [m M]
+  ;; m + ((M - m) / 2)
+  (+ m (/ (- M m) 2))
+  )
+
+(defn semantic-partitioning [s exponent left-char right-char]
   ;; TODO: implement semantic partitioning
   (let [n (** 2 exponent)
         min (atom 0)
         max (atom n)]
-    (doseq [i (range 0 (inc exponent))]
+    (doseq [i (range 0 exponent)]
       (if (= (subs s i (inc i)) left-char)
-        (swap! max #())
-        (if (= (subs s i (inc i)) right-char)
+        (swap! max #(midpoint @min %1))
+        (when (= (subs s i (inc i)) right-char)
+          (swap! min #(midpoint %1 @max))
           )
         )
       )
+    @min
   )
   )
 
 (defn get-row [boarding-pass]
   ;; 
   (let [s (subs boarding-pass 0 8)]
-    (semantic-partitioning
-     boarding-pass
-     7
-     "B"
-     "F"
+    (semantic-partitioning s 7 "F" "B")
     )
   )
 
@@ -46,7 +46,7 @@
   ;;
   (let [len (count boarding-pass)
         s (subs boarding-pass (- len 3) len)]
-    
+    (semantic-partitioning s 3 "L" "R")
     )
   )
 
@@ -59,7 +59,22 @@
     )
   )
 
+(defn find-missing-seat [id-coll]
+  ;;
+  (let [sorted-ids (vec (sort id-coll))]
+    (doseq [i (range 1 (count sorted-ids))]
+      (when (not= (- (sorted-ids i) (sorted-ids (dec i))) 1)
+        (println "Your seat is between seats:" (sorted-ids (dec i)) (sorted-ids i))
+        )
+     )
+    )
+  )
+
 (let [input-path "./input/day5.txt"
       boarding-passes (get-lines input-path)]
-  (get-row boarding-pass)
+  (println
+   "Highest seat ID on a boarding pass:"
+   (reduce max (map get-id boarding-passes)))
+  
+  (find-missing-seat (map get-id boarding-passes))
   )
