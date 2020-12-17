@@ -40,13 +40,16 @@
   (let [answers (->> coll
                      (consolidate-group-forms)
                      (unique-chars)
-                     (into []))]
-    (for [i (range 0 (count coll))]
+                     (into []))
+        vec-coll (vec coll)]
+    (for [i (range 0 (count vec-coll))]
       ;; TODO: check whether answer is contained in each response
+      (println (vec-coll i))
       )
     )
   )
 
+;; NOTE: remember to add blank line to beginning and end of input file
 (let [input-path "./input/day6.txt"
       declaration-forms (vec (get-lines input-path))
       group-forms-indexes (vec (get-blank-line-indexes declaration-forms))]

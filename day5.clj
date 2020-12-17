@@ -19,7 +19,7 @@
   )
 
 (defn semantic-partitioning [s exponent left-char right-char]
-  ;; TODO: implement semantic partitioning
+  ;; 
   (let [n (** 2 exponent)
         min (atom 0)
         max (atom n)]
@@ -52,7 +52,7 @@
 
 (defn get-id [boarding-pass]
   ;; Compute boarding pass id:
-  ;; id = (row * 8) + 5
+  ;; id = (row * 8) + col
   (let [row (get-row boarding-pass)
         col (get-column boarding-pass)]
     (+ col (* 8 row))
